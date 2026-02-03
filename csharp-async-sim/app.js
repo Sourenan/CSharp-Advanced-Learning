@@ -14,6 +14,9 @@
   const codeBlock = document.getElementById("codeBlock");
   const timeline = document.getElementById("timeline");
   const trace = document.getElementById("trace");
+  const scenarioSummary = document.getElementById("scenarioSummary");
+  const scenarioGoals = document.getElementById("scenarioGoals");
+  const stepDetail = document.getElementById("stepDetail");
 
   const laneUI = document.getElementById("lane-ui");
   const laneIO = document.getElementById("lane-io");
@@ -69,6 +72,7 @@
     currentScenario = SCENARIOS.find(s => s.id === id);
     reset();
     codeBlock.textContent = currentScenario.code;
+    updateScenarioGuide();
     buildTimeline();
     render();
   }
@@ -169,6 +173,7 @@
     lastEvent.textContent = e ? formatEvent(e) : "—";
     stepLabel.textContent = Math.max(0, idx + 1).toString();
     stepMax.textContent = currentScenario ? currentScenario.events.length.toString() : "0";
+    updateStepDetail(e);
 
     // trace (simple)
     trace.textContent = buildTrace(state, e);
@@ -180,6 +185,27 @@
 
     // animate a box depending on the last event
     animateFromEvent(e);
+  }
+
+  function updateScenarioGuide() {
+    if (!currentScenario) return;
+    scenarioSummary.textContent = currentScenario.summary || "";
+    scenarioGoals.innerHTML = "";
+    (currentScenario.goals || []).forEach(goal => {
+      const li = document.createElement("li");
+      li.textContent = goal;
+      scenarioGoals.appendChild(li);
+    });
+    updateStepDetail(null);
+  }
+
+  function updateStepDetail(event) {
+    if (!stepDetail) return;
+    if (!event || !event.note) {
+      stepDetail.textContent = "Select a step to see why it matters.";
+      return;
+    }
+    stepDetail.textContent = event.note;
   }
 
   function buildTrace(state, last) {

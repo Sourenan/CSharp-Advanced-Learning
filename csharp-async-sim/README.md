@@ -7,6 +7,7 @@ You can:
 - choose an environment (UI vs ASP.NET Core vs Console)
 - Step / Play / Reset
 - click any timeline step to jump
+- read scenario goals and step-by-step explanations to understand why each event matters
 
 ## How to run
 1) Unzip the folder
@@ -16,7 +17,8 @@ You can:
 
 ## How to add a scenario
 Open `scenarios.js` and append a new object to `SCENARIOS`:
-- id, title, code, events[]
+- id, title, summary, goals[], code, events[]
+- Each event can include an optional `note` for the Scenario Guide panel.
 
 Events are intentionally simple and extensible. V2 can add:
 - deadlock_block
