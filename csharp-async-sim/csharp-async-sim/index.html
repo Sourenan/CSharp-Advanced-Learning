@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>C# Sync/Async Visual Simulator (Event Engine)</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <div class="title">
+      <h1>C# Sync/Async Visual Simulator</h1>
+      <p class="subtitle">Generic event engine + scenario scripts (UI vs ASP.NET Core/Console)</p>
+    </div>
+    <div class="controls">
+      <label>
+        Scenario
+        <select id="scenarioSelect"></select>
+      </label>
+
+      <label>
+        Environment
+        <select id="envSelect">
+          <option value="ui">UI (WinForms/WPF)</option>
+          <option value="aspnetcore">ASP.NET Core</option>
+          <option value="console">Console</option>
+        </select>
+      </label>
+
+      <div class="buttons">
+        <button id="resetBtn">Reset</button>
+        <button id="stepBtn">Step</button>
+        <button id="playBtn">Play</button>
+        <button id="pauseBtn" disabled>Pause</button>
+      </div>
+
+      <label class="speed">
+        Speed
+        <input id="speedRange" type="range" min="0.5" max="3" step="0.5" value="1" />
+        <span id="speedVal">1x</span>
+      </label>
+    </div>
+  </header>
+
+  <main>
+    <section class="left">
+      <div class="panel">
+        <h2>Code (reference)</h2>
+        <pre id="codeBlock" class="code"></pre>
+      </div>
+
+      <div class="panel">
+        <h2>Timeline</h2>
+        <div id="timeline" class="timeline"></div>
+      </div>
+
+      <div class="panel">
+        <h2>Trace</h2>
+        <pre id="trace" class="trace"></pre>
+      </div>
+    </section>
+
+    <section class="right">
+      <div class="panel">
+        <h2>Animation</h2>
+
+        <div class="legend">
+          <span class="pill"><span class="dot dot-ui"></span>UI / Current thread</span>
+          <span class="pill"><span class="dot dot-tp"></span>ThreadPool worker</span>
+          <span class="pill"><span class="dot dot-io"></span>OS I/O</span>
+          <span class="pill"><span class="dot dot-cont"></span>Continuation</span>
+        </div>
+
+        <div class="lanes">
+          <div class="lane" data-lane="ui">
+            <div class="lane-title">UI / Current Thread</div>
+            <div class="lane-track" id="lane-ui"></div>
+          </div>
+          <div class="lane" data-lane="io">
+            <div class="lane-title">I/O (OS)</div>
+            <div class="lane-track" id="lane-io"></div>
+          </div>
+          <div class="lane" data-lane="tp">
+            <div class="lane-title">ThreadPool</div>
+            <div class="lane-track" id="lane-tp"></div>
+          </div>
+        </div>
+
+        <div class="status">
+          <div><strong>Step:</strong> <span id="stepLabel">0</span>/<span id="stepMax">0</span></div>
+          <div><strong>Last event:</strong> <span id="lastEvent">—</span></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>
+      Tip: Start with <strong>await ReadAsync</strong> vs <strong>await Task.Run</strong>. Switch Environment and observe where continuation runs.
+    </p>
+  </footer>
+
+  <script src="scenarios.js"></script>
+  <script src="engine.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
